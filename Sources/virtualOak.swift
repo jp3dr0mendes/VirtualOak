@@ -11,12 +11,12 @@ let pokeapi: String = "https://pokeapi.co/api/v2/pokemon/"
 let filePath = "/Users/user/.pokeDex.txt"
 
 @main
-struct Oak: ParsableCommand {
+struct Oak: ParsableCommand, Decodable {
     
     static var configuration = CommandConfiguration(
         abstract: "Pokemon Pet Buddy",
         discussion: "O VirtualOak permite que você cuide do seu Pokemon diretamente do seu terminal, com ele, você poderá brincar com ser Pokemon, alimenta-lo, acompanhar o seu progresso e leva-lo à enfermeira Joy sempre que precisar. Além disso, é possível fazer batalhas amigáveis para treina-lo e (talvez) evolui-lo. Basta chamar o Professor Carvalho pelo seu terminal e informá-lo que tipo de interação você deseja ter com o seu monstrinho (e não esqueça de se despedir).",
-        subcommands: [Init.self]
+        subcommands: [Init.self, Check.self]
     )
     
     //mutating func run() throws {}
@@ -168,20 +168,54 @@ struct Init: ParsableCommand {
     }
 }
 
-struct Check{
+struct Check: ParsableCommand{
     
+//    var buddy = readData(fileURL) ?? Buddy()
     
+    var charmander = Charmander()
     
     func run(){
         
+        if let buddy = readData(fileURL) {
+            
+            print(linha)
+            printc("CHECK\n", 50)
+            print(linha)
+            
+            print("""
+            Fome       : \(buddy.status.fome)
+            Felicidade : \(buddy.status.felicidade)
+            Saude      : \(buddy.status.saude)
+            """)
+            
+            if buddy.especie == "charmander"{
+                if buddy.status.fome > 80 || buddy.status.saude < 20 || buddy.status.felicidade < 20 {
+                    charmander.charmanderDoente()
+                } else {
+                    charmander.charmanderFeliz()
+                }
+            } else if buddy.especie == "squirtle" {
+                
+            } else {
+                
+            }
+        } else {
+            print("Erro ao ler os dados do buddy")
+        }
+                        
     }
 }
+
 
 struct Care{
     @Option(help: "Formas de se cuidar o seu pokemon")
     var careOption: String
     
+    
+    
     func run(){
+        
+        print("Saudações Treinador!\n")
         
     }
 }

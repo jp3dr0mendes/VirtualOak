@@ -7,6 +7,8 @@
 
 import Foundation
 
+let linha = "=================================================\n"
+
 
 struct Status: Encodable, Decodable {
     var fome: Int = 100
@@ -195,7 +197,7 @@ func saveData(_ path:URL, buddy: Buddy){
 }
 
 
-func readData(_ path:URL){
+func readData(_ path:URL) -> Buddy?{
     do {
         // Ler os dados JSON do arquivo
         let jsonData = try Data(contentsOf: path)
@@ -204,16 +206,25 @@ func readData(_ path:URL){
         let decoder = JSONDecoder()
 
         // Decodificar os dados JSON em uma instância da struct Person
-        let person = try decoder.decode(Buddy.self, from: jsonData)
+        let buddy = try decoder.decode(Buddy.self, from: jsonData)
 
         // Imprimir os dados da pessoa
-        print("Nome: \(person.especie)")
+//        print("Nome: \(person.especie)")
+        return buddy
 
     } catch {
         print("Erro ao ler o arquivo JSON: \(error)")
     }
+    return nil
 }
 
+func printc(_ s: String, _ tam: Int) {
+    let ne = (tam - s.count) / 2
+    for _ in 0..<ne {
+        print(" ", terminator: "")
+    }
+    print(s)
+}
 
 //func lerBancodeDados() -> Buddy? {
 //    let jsonDecoder = JSONDecoder()

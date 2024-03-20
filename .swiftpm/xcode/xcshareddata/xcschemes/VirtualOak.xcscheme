@@ -52,6 +52,10 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "check"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "care --snack"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

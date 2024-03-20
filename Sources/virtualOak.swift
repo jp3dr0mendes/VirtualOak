@@ -16,10 +16,8 @@ struct Oak: ParsableCommand, Decodable {
     static var configuration = CommandConfiguration(
         abstract: "Pokemon Pet Buddy",
         discussion: "O VirtualOak permite que você cuide do seu Pokemon diretamente do seu terminal, com ele, você poderá brincar com ser Pokemon, alimenta-lo, acompanhar o seu progresso e leva-lo à enfermeira Joy sempre que precisar. Além disso, é possível fazer batalhas amigáveis para treina-lo e (talvez) evolui-lo. Basta chamar o Professor Carvalho pelo seu terminal e informá-lo que tipo de interação você deseja ter com o seu monstrinho (e não esqueça de se despedir).",
-        subcommands: [Init.self, Check.self]
+        subcommands: [Init.self, Check.self, Care.self]
     )
-    
-    //mutating func run() throws {}
 }
 
 func obterBuddyValido() -> Int {
@@ -38,10 +36,6 @@ struct Init: ParsableCommand {
     //TODO: manipulacao de arquivo
     
     func run(){
-        //let fileURL = URL(fileURLWithPath: "/Users/user/Documents/")
-        //let contentDirectory = try! FileManager.default.contentsOfDirectory(at: fileURL, includingPropertiesForKeys: nil)
-        //let validateArray = contentDirectory.map{$0.absoluteString}
-        
         
         let fileManager = FileManager.default
         
@@ -70,7 +64,7 @@ struct Init: ParsableCommand {
             Pressione enter para continuar...
             """)
         
-        let continueText = readLine() ?? ""
+        let _continueText = readLine() ?? ""
         
         clearTerminalScreen()
         
@@ -115,74 +109,27 @@ struct Init: ParsableCommand {
                 print("Digite SIM (S) ou NAO (N)")
             }
         }
-        
-//        criarBancoDeDados(data: pokemons[chooseBuddy])
+    
         saveData(fileURL, buddy: pokemons[chooseBuddy])
-        readData(fileURL)
-//        criarBasedeDados(buddy: pokemons[chooseBuddy], filePath: filePath)
-//        checarBasedeDados()
-        
-        //        if let url = URL(string: pokeapi+chooseBuddy){
-        //
-        //            print("1")
-        //            let session = URLSession.shared
-        //
-        //            let task = session.dataTask(with: url){data, response, error in
-        //
-        //                print("1")
-        //                print(data)
-        //                print(response)
-        //                print(error)
-        //
-        //                if let error = error {
-        //                    print("Erro: \(error)")
-        //                    return
-        //                }
-        //
-        //                print("1")
-        //
-        //
-        //                guard let data = data else {
-        //                    print("pokemon nao encontrado!!!")
-        //
-        //                    print("1")
-        //
-        //                    return
-        //                }
-        //
-        //                if let reponseString = String(data:data, encoding: .utf8){
-        //                    print("1")
-        //
-        //                    print("Resposta: \(reponseString)")
-        //                }
-        //            }
-        //
-        //            task.resume()
-        //            print("1")
-        //
-        //        } else {
-        //            print("erro aqui oh")
-        //        }
-        //    }
-        //}        
     }
 }
 
 struct Check: ParsableCommand{
-    
-//    var buddy = readData(fileURL) ?? Buddy()
-    
+        
     var charmander = Charmander()
     
     func run(){
         
         if let buddy = readData(fileURL) {
             
-            print(linha)
-            printc("CHECK\n", 50)
-            print(linha)
+//            print(linha)
+//            printc("CHECK", 50)
+//            print(linha)
+            
+            cabecalho(titulo: "CHECK")
             
             print("""
+            
             Fome       : \(buddy.status.fome)
             Felicidade : \(buddy.status.felicidade)
             Saude      : \(buddy.status.saude)
@@ -202,20 +149,41 @@ struct Check: ParsableCommand{
         } else {
             print("Erro ao ler os dados do buddy")
         }
-                        
+        diminuirFelicidade()
+        aumentarFome()
     }
 }
 
 
-struct Care{
-    @Option(help: "Formas de se cuidar o seu pokemon")
-    var careOption: String
+struct Care: ParsableCommand{
     
+    static var configuration = CommandConfiguration(
+        abstract: "Cuide do seu Pokémon."
+    )
     
+    @Flag(name: .shortAndLong, help: "Dê um lanche para o seu Pokemon")
+    var snack: Bool = false
     
+    @Flag(name: .shortAndLong, help: "Brinque com seu Pokemon")
+    var play: Bool = false
+    
+    @Flag(name: .shortAndLong, help: "Chame a enfermeira Joy")
+    var joy: Bool = false
+        
     func run(){
-        
-        print("Saudações Treinador!\n")
-        
+        if snack{
+            cabecalho(titulo: "Alimentando seu Buddy")
+            
+            verbosePrint("Estamos alimentando seu monstrinho")
+            verbosePrint("Prontinho agora ele tem \(readData(fileURL)?.status.fome)")
+            
+            diminuirFome()
+        } else if play{
+            aumentarFelicidade()
+            aumentarFome()
+        } else if joy{
+            aumentarSaude()
+        }
     }
 }
+

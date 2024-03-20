@@ -7,8 +7,7 @@
 
 import Foundation
 
-let linha = "=================================================\n"
-
+let linha = "================================================="
 
 struct Status: Encodable, Decodable {
     var fome: Int = 100
@@ -24,10 +23,6 @@ struct Buddy: Encodable, Decodable {
     var level: Int = 1
     var status: Status = Status()
 }
-
-//struct Treinador {
-//    //resto dos dados
-//}
 
 var pikachu: Buddy = Buddy(tipo: "Elétrico", especie: "Pikachu")
 
@@ -89,27 +84,6 @@ func clearTerminalScreen() {
     clear.waitUntilExit()
 }
 
-
-// Chamando a função para criar um arquivo de texto
-
-//func criarBancoDeDados(data: Buddy, filePath: String) {
-//    let jsonEncoder = JSONEncoder()
-//
-//    jsonEncoder.OutputFormatting = .prettyPrinted//.prettyPrinted
-//
-//    do {
-//        let jsonData = try JSONEncoder.encode(data)//JSONEncoder.encode(data)
-//
-//        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-//        let fileURL = documentsURL.appendingPathComponent(filePath)
-//
-//        try jsonData.write(to: fileURL)
-//        print("Sua jornada começou!!")
-//    } catch {
-//        print("Error!")
-//    }
-//}
-
 func criarBancoDeDados(data: Buddy){
     
     let file: String = "pokeData.json"
@@ -147,31 +121,6 @@ func lerJSON(_ path: String) -> String{
     return ""
 }
 
-//func lerBancodeDados() -> Buddy {
-//    let buddyData = Data(lerJSON(path).utf8)
-//    
-//    print(lerJSON(path))
-//    
-//    let jsonDecoder = JSONDecoder()
-//    
-//    let testBuddy = Buddy(nomeBuddy: "ljdfng", tipo: "kxhdbf", especie: "ksjdhfjks")
-//    
-//    jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
-//    
-//    do {
-//        let decodedBuddy = try jsonDecoder.decode(Buddy.self, from: buddyData)
-//        
-//        print("""
-//        Pokemon Status: \(decodedBuddy.status.felicidade)
-//        """)
-//        return decodedBuddy
-//    } catch {
-//        print("Error: \(error.localizedDescription)")
-//    }
-//    
-//    return testBuddy
-//}
-
 let fileURL = URL(fileURLWithPath: "/Users/user/pokeData.json")
 
 func saveData(_ path:URL, buddy: Buddy){
@@ -185,7 +134,7 @@ func saveData(_ path:URL, buddy: Buddy){
         let jsonData = try encoder.encode(buddy)
 
         // Converta JSON Data em String (opcional)
-        if let jsonString = String(data: jsonData, encoding: .utf8) {
+        if let _jsonString = String(data: jsonData, encoding: .utf8) {
 
             // Gravar dados JSON no arquivo
             try jsonData.write(to: path)
@@ -221,29 +170,86 @@ func readData(_ path:URL) -> Buddy?{
 func printc(_ s: String, _ tam: Int) {
     let ne = (tam - s.count) / 2
     for _ in 0..<ne {
-        print(" ", terminator: "")
+        print("", terminator: " ")
     }
     print(s)
 }
 
-//func lerBancodeDados() -> Buddy? {
-//    let jsonDecoder = JSONDecoder()
-//    
-//    // Verifique se o arquivo pokeData.json existe no diretório de documentos
-//    if let filePath = Bundle.main.path(forResource: "/Users/user/Documents/.pokeData", ofType: "json"){
-//        do {
-//            let buddyData = try Data(contentsOf: URL(fileURLWithPath: Pa))
-//            let decodedBuddy = try jsonDecoder.decode(Buddy.self, from: buddyData)
-//            
-//            print("""
-//            Pokemon Status: \(decodedBuddy.status.felicidade)
-//            """)
-//            return decodedBuddy
-//        } catch {
-//            print("Error: \(error.localizedDescription)")
-//            return nil
-//        }
-//
-//    }
-
+func aumentarFelicidade(){
+    var buddy = readData(fileURL)!
+    if buddy.status.felicidade > 101 || buddy.status.felicidade <= 0 {
+        return
+    }
     
+    buddy.status.felicidade += 25
+    
+    saveData(fileURL, buddy: buddy)
+}
+
+
+func diminuirFelicidade(){
+    var buddy = readData(fileURL)!
+    
+    buddy.status.felicidade -= 10
+    
+    saveData(fileURL, buddy: buddy)
+}
+
+func aumentarFome(){
+    var buddy = readData(fileURL)!
+    if buddy.status.fome > 101 || buddy.status.fome <= 0 {
+        return
+    }
+    buddy.status.fome += 10
+    
+    saveData(fileURL, buddy: buddy)
+}
+
+func diminuirFome(){
+    var buddy = readData(fileURL)!
+    if buddy.status.fome > 101 || buddy.status.fome <= 0 {
+        return
+    }
+    buddy.status.fome -= 25
+    
+    saveData(fileURL, buddy: buddy)
+}
+
+func aumentarSaude(){
+    var buddy = readData(fileURL)!
+    
+    buddy.status.saude = 100
+    
+    saveData(fileURL, buddy: buddy)
+}
+
+func diminuirSaude(points: Int){
+    var buddy = readData(fileURL)!
+    
+    if buddy.status.saude > 101 || buddy.status.saude <= 0 {
+        return
+    }
+    
+    buddy.status.saude -= points
+    
+    saveData(fileURL, buddy: buddy)
+}
+
+func cabecalho(titulo: String){
+    
+    let maxWidth = 90
+    let borda = "\(String(repeating: "-", count: 90))"
+    let paddingChar = " "
+    let paddingSize = (maxWidth - titulo.count) / 2
+    let paddingTitle = String(repeating: paddingChar, count: (maxWidth - titulo.count) / 2)
+    
+    print(borda)
+    print("|\(paddingTitle)\(titulo)\(paddingTitle)|")
+    print(borda)
+    
+}
+
+func verbosePrint(_ text: String){
+    print("▷ \(text)")
+    sleep(1)
+}

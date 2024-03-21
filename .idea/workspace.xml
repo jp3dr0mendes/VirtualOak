@@ -13,10 +13,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="600910e2-01fd-41ef-a512-78acffe9031c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sources/arts.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/arts.swift" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Sources/functions.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/functions.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sources/virtualOak.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/virtualOak.swift" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,7 +85,7 @@
       <workItem from="1710640299814" duration="46000" />
       <workItem from="1710640347932" duration="89000" />
       <workItem from="1710640440250" duration="1381000" />
-      <workItem from="1710991626915" duration="3059000" />
+      <workItem from="1710991626915" duration="3348000" />
     </task>
     <servers />
   </component>

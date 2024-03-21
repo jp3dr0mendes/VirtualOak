@@ -7,8 +7,8 @@
 
 import Foundation
 
-//let fileURL = URL(fileURLWithPath: "/Users/user/pokeData.json")
-let fileURL = URL(fileURLWithPath: "/home/honorio/pokeData.json")
+let fileURL = URL(fileURLWithPath: "/Users/user/pokeData.json")
+
 let linha = "================================================="
 
 struct Status: Encodable, Decodable {

@@ -165,12 +165,12 @@ struct Care: ParsableCommand{
         
     func run(){
         if snack{
-            cabecalho(titulo: "Alimentando seu Buddy")
-            
+            printWithBox("Alimentando seu Buddy", style: "parchment")
             verbosePrint("Estamos alimentando seu monstrinho")
             verbosePrint("Prontinho agora ele tem \(readData(fileURL)?.status.fome)")
             
             diminuirFome()
+            callForPokemon(pokemon: "ditto")
         } else if play{
             aumentarFelicidade()
             aumentarFome()

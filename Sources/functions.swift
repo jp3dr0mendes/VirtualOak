@@ -11,40 +11,6 @@ let fileURL = URL(fileURLWithPath: "/Users/user/pokeData.json")
 
 let linha = "================================================="
 
-struct Status: Encodable, Decodable {
-    var fome: Int = 100
-    var saude: Int = 100
-    var felicidade: Int = 100
-}
-
-struct Buddy: Encodable, Decodable {
-    var nomeBuddy: String? = nil
-    let tipo: String
-    let especie: String
-    var xp: Int = 10
-    var level: Int = 1
-    var status: Status = Status()
-}
-
-var pikachu: Buddy = Buddy(tipo: "Elétrico", especie: "Pikachu")
-
-var charmander: Buddy = Buddy(tipo: "Fogo", especie: "charmander", status: Status(fome: 10))
-
-var squirtle: Buddy = Buddy(tipo: "Agua", especie: "squirtle")
-
-var bulbasaur: Buddy = Buddy(tipo: "Planta", especie: "bulbasaur")
-
-var pokemons:[Buddy] = [pikachu, charmander, squirtle, bulbasaur]
-
-func showPokemons(buddy: Int){
-    switch buddy{
-        case 1: showCharmander();
-        case 2: showSquirtle();
-        case 3: showBulbassaur();
-    default: print("")
-    }
-}
-
 // Função auxiliar: Limpa o terminal
 func clearTerminalScreen() {
     let clear = Process()
@@ -98,72 +64,12 @@ func readData(_ path:URL) -> Buddy?{
     return nil
 }
 
-func aumentarFelicidade(){
-    var buddy = readData(fileURL)!
-    if buddy.status.felicidade > 101 || buddy.status.felicidade <= 0 {
-        return
-    }
-    
-    buddy.status.felicidade += 25
-    
-    saveData(fileURL, buddy: buddy)
-}
-
-
-func diminuirFelicidade(){
-    var buddy = readData(fileURL)!
-    
-    buddy.status.felicidade -= 10
-    
-    saveData(fileURL, buddy: buddy)
-}
-
-func aumentarFome(){
-    var buddy = readData(fileURL)!
-    if buddy.status.fome > 101 || buddy.status.fome <= 0 {
-        return
-    }
-    buddy.status.fome += 10
-    
-    saveData(fileURL, buddy: buddy)
-}
-
-func diminuirFome(){
-    var buddy = readData(fileURL)!
-    if buddy.status.fome > 101 || buddy.status.fome <= 0 {
-        return
-    }
-    buddy.status.fome -= 25
-    
-    saveData(fileURL, buddy: buddy)
-}
-
-func aumentarSaude(){
-    var buddy = readData(fileURL)!
-    
-    buddy.status.saude = 100
-    
-    saveData(fileURL, buddy: buddy)
-}
-
-func diminuirSaude(points: Int){
-    var buddy = readData(fileURL)!
-    
-    if buddy.status.saude > 101 || buddy.status.saude <= 0 {
-        return
-    }
-    
-    buddy.status.saude -= points
-    
-    saveData(fileURL, buddy: buddy)
-}
-
 func cabecalho(titulo: String){
     
     let maxWidth = 90
     let borda = "✦\(String(repeating: "-", count: 90))✦"
     let paddingChar = " "
-    let paddingSize = (maxWidth - titulo.count) / 2
+//    let _paddingSize = (maxWidth - titulo.count) / 2
     let paddingTitle = String(repeating: paddingChar, count: (maxWidth - titulo.count) / 2)
     
     print(borda)
@@ -175,4 +81,64 @@ func cabecalho(titulo: String){
 func verbosePrint(_ text: String){
     print("▷ \(text)")
     sleep(1)
+}
+
+func printWithBox(_ text: String, style: String) {
+    let process = Process()
+    process.launchPath = "/bin/bash"
+    process.arguments = ["-c", "echo -e '\(text)' | /opt/homebrew/Cellar/boxes/2.3.0/bin/boxes -d \(style)"] // Use o caminho completo para o executável boxes
+    
+    let pipe = Pipe()
+    process.standardOutput = pipe
+    process.launch()
+    
+    let data = pipe.fileHandleForReading.readDataToEndOfFile()
+    if let output = String(data: data, encoding: .utf8) {
+        print(output)
+    }
+}
+
+
+@discardableResult
+func shell(_ command: String) -> String {
+    let task = Process()
+    let pipe = Pipe()
+
+    task.standardOutput = pipe
+    task.arguments = ["-c", command]
+    task.launchPath = "/bin/zsh"
+    task.launch()
+
+    let data = pipe.fileHandleForReading.readDataToEndOfFile()
+    let output = String(data: data, encoding: .utf8)!
+
+    print(output)
+    return output
+}
+
+func printRPGText(_ text: String) {
+    let delay = 0.1 // Ajuste este valor para controlar a velocidade da animação
+
+    for char in text {
+        // Imprimir uma letra por vez, com um pequeno atraso
+        print(char, terminator: "")
+        fflush(stdout)
+        Thread.sleep(forTimeInterval: delay)
+    }
+    print() // Adicionar uma nova linha no final
+}
+func callForPokemon(pokemon: String){
+    let processo = Process()
+    processo.launchPath = "/usr/bin/python3"
+    processo.arguments = ["/Users/user/Documents/VirtualOak/request.py", pokemon]
+    
+    let pipe = Pipe()
+    processo.standardOutput = pipe
+    
+    processo.launch()
+    
+    let data = pipe.fileHandleForReading.readDataToEndOfFile()
+    if let output = String(data: data, encoding: .utf8) {
+        print(output)
+    }
 }

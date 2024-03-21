@@ -7,6 +7,8 @@
 
 import Foundation
 
+//let fileURL = URL(fileURLWithPath: "/Users/user/pokeData.json")
+let fileURL = URL(fileURLWithPath: "/home/honorio/pokeData.json")
 let linha = "================================================="
 
 struct Status: Encodable, Decodable {
@@ -43,38 +45,6 @@ func showPokemons(buddy: Int){
     }
 }
 
-
-
-
-func criarBasedeDados(buddy: Buddy, filePath: String) {
-    let fileManager = FileManager.default
-    
-    if let data = ("\(buddy)").data(using: .utf8) {
-//    if let data = conteudo.data(using: .utf8) {
-        let success = fileManager.createFile(atPath: filePath, contents: data, attributes: nil)
-        if success {
-            print("File created and data written successfully.")
-        } else {
-            print("Failed to create file.")
-        }
-    } else {
-        print("Failed to convert string to data.")
-    }
-}
-
-func checarBasedeDados() {
-    let fileManager = FileManager.default
-    //reads data from "myfile.txt" to show that data has been written
-    if let fileData = fileManager.contents(atPath: filePath) {
-        if let fileContentString = String(data: fileData, encoding: .utf8) {
-            print("File contents:")
-            print(fileContentString)
-        }
-    } else {
-        print("Failed to read file")
-    }
-}
-
 // Função auxiliar: Limpa o terminal
 func clearTerminalScreen() {
     let clear = Process()
@@ -83,45 +53,6 @@ func clearTerminalScreen() {
     clear.launch()
     clear.waitUntilExit()
 }
-
-func criarBancoDeDados(data: Buddy){
-    
-    let file: String = "pokeData.json"
-    let jsonEncode = JSONEncoder()
-    let structToJSON = try! jsonEncode.encode(data)
-    
-    
-    if let documentDirectory = FileManager.default.urls(for: .documentDirectory,
-                                                        in: .userDomainMask).first {
-        let pathWithFilename = documentDirectory.appendingPathComponent(file)
-        do {
-            try structToJSON.write(to: pathWithFilename)
-            print("Pokedex criada")
-        } catch {
-            print("Error in save JSON")
-        }
-    }
-}
-//let path = "~/Users/user/Documents/"
-let path: String = "User/user/VirtualOak"
-
-func lerJSON(_ path: String) -> String{
-    if let fileURL = Bundle.main.url(forResource: "User/user/VirtualOak", withExtension: "json") {
-        do {
-            // Lê o conteúdo do arquivo como uma string
-            let jsonString = try String(contentsOf: fileURL)
-            print("Conteúdo do arquivo JSON como string:")
-            return jsonString
-        } catch {
-            print("Erro ao ler o arquivo JSON como string: \(error.localizedDescription)")
-        }
-    } else {
-        print("Arquivo JSON não encontrado.")
-    }
-    return ""
-}
-
-let fileURL = URL(fileURLWithPath: "/Users/user/pokeData.json")
 
 func saveData(_ path:URL, buddy: Buddy){
     // Instância da struct
@@ -165,14 +96,6 @@ func readData(_ path:URL) -> Buddy?{
         print("Erro ao ler o arquivo JSON: \(error)")
     }
     return nil
-}
-
-func printc(_ s: String, _ tam: Int) {
-    let ne = (tam - s.count) / 2
-    for _ in 0..<ne {
-        print("", terminator: " ")
-    }
-    print(s)
 }
 
 func aumentarFelicidade(){
@@ -238,13 +161,13 @@ func diminuirSaude(points: Int){
 func cabecalho(titulo: String){
     
     let maxWidth = 90
-    let borda = "\(String(repeating: "-", count: 90))"
+    let borda = "✦\(String(repeating: "-", count: 90))✦"
     let paddingChar = " "
     let paddingSize = (maxWidth - titulo.count) / 2
     let paddingTitle = String(repeating: paddingChar, count: (maxWidth - titulo.count) / 2)
     
     print(borda)
-    print("|\(paddingTitle)\(titulo)\(paddingTitle)|")
+    print("| \(paddingTitle)\(titulo)\(paddingTitle)|")
     print(borda)
     
 }

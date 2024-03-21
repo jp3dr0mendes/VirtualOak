@@ -7,9 +7,6 @@
 import ArgumentParser
 import Foundation
 
-let pokeapi: String = "https://pokeapi.co/api/v2/pokemon/"
-let filePath = "/Users/user/.pokeDex.txt"
-
 @main
 struct Oak: ParsableCommand, Decodable {
     
@@ -37,18 +34,18 @@ struct Init: ParsableCommand {
     
     func run(){
         
-        let fileManager = FileManager.default
-        
-        if fileManager.fileExists(atPath: filePath) {
-            print("""
-                  Sua jornada pokemon js foi iniciada!!!
-                  Cheque como seu pokemon esta com um 'oak check'
-                  """)
-            
-            return
-        }
-//        
-        
+//        let fileManager = FileManager.default
+//
+//        if fileManager.fileExists(atPath: fileURL) {
+//            print("""
+//                  Sua jornada pokemon js foi iniciada!!!
+//                  Cheque como seu pokemon esta com um 'oak check'
+//                  """)
+//
+//            return
+//        }
+////
+//
         print("Saudações Treinador!\n")
         
         print("""
@@ -121,11 +118,7 @@ struct Check: ParsableCommand{
     func run(){
         
         if let buddy = readData(fileURL) {
-            
-//            print(linha)
-//            printc("CHECK", 50)
-//            print(linha)
-            
+
             cabecalho(titulo: "CHECK")
             
             print("""
@@ -142,7 +135,7 @@ struct Check: ParsableCommand{
                     charmander.charmanderFeliz()
                 }
             } else if buddy.especie == "squirtle" {
-                
+
             } else {
                 
             }

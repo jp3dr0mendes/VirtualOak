@@ -20,6 +20,16 @@ struct Buddy: Encodable, Decodable {
     var xp: Int = 10
     var level: Int = 1
     var status: Status = Status()
+    var ataques: [String]? = nil
+    
+    mutating func getAttacks(){
+        
+        let especie = self.especie
+        let pokemon = callForPokemon(pokemon: especie, path: fileURL, file: "buddy")
+        self.ataques = pokemon?.ataques ?? []
+        print("dljsfhg")
+        print("ataques: \(self.ataques ?? [])")
+    }
 }
 
 var pikachu: Buddy = Buddy(tipo: "Elétrico", especie: "Pikachu")
@@ -34,6 +44,7 @@ var pokemons:[Buddy] = [pikachu, charmander, squirtle, bulbasaur]
 
 func showPokemons(buddy: Int){
     switch buddy{
+        case 0: showPikachu();
         case 1: showCharmander();
         case 2: showSquirtle();
         case 3: showBulbassaur();

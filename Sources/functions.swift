@@ -8,6 +8,7 @@
 import Foundation
 
 let fileURL = URL(fileURLWithPath: "/Users/user/pokeData.json")
+let advURL = URL(fileURLWithPath: "/Users/user/adversario.json")
 
 let linha = "================================================="
 
@@ -127,10 +128,11 @@ func printRPGText(_ text: String) {
     }
     print() // Adicionar uma nova linha no final
 }
-func callForPokemon(pokemon: String){
+
+func callForPokemon(pokemon: String, path: URL, file: String) -> Buddy?{
     let processo = Process()
     processo.launchPath = "/usr/bin/python3"
-    processo.arguments = ["/Users/user/Documents/VirtualOak/request.py", pokemon]
+    processo.arguments = ["/Users/user/Documents/VirtualOak/request.py", pokemon, file]
     
     let pipe = Pipe()
     processo.standardOutput = pipe
@@ -141,4 +143,57 @@ func callForPokemon(pokemon: String){
     if let output = String(data: data, encoding: .utf8) {
         print(output)
     }
+    // let url = URL(fileURLWithPath: "/Users/user/adversario.json")
+    let pokemon = readData(path)
+//    return pokemon
+    shell("rm \(path)"); return pokemon
 }
+
+func callForBattle(_ adversario: String){
+    printRPGText("Procurando pokemon...")
+    
+    var buddy = readData(fileURL)!
+    
+    if let pokemon = callForPokemon(pokemon: adversario, path: advURL, file: "adv"){
+        verbosePrint("Um \(pokemon.especie) selvagem apareceu!")
+        
+        clearTerminalScreen()
+        
+        printWithBox("INICIANDO BATALHA", style: "sample")
+        
+        clearTerminalScreen()
+        
+        var count: Int = 0
+        
+        while true{
+            printWithBox("Round \(count)", style: "sample")
+            print(pokemon)
+            print(buddy)
+            break
+        }
+    } else {
+        print("Erro ao iniciar a batalha, tente novamente!")
+    }
+}
+
+func dado(faces: Int) -> Double{
+    var rng = SystemRandomNumberGenerator()
+    let critic: Int = Int.random(in: 0...faces, using: &rng)
+    var low: Int = Int.random(in: 0...faces, using: &rng)
+    
+    while low == critic {
+        low = Int.random(in: 0...faces, using: &rng)
+    }
+    
+    let randomNumber = Int.random(in: 0...faces, using: &rng)
+    
+    if randomNumber == critic {
+        return 0.2
+    } else if randomNumber == low {
+        return -0.2
+    } else {
+        return 0.0
+    }
+}
+
+//func evolve()

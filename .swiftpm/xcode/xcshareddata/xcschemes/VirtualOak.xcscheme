@@ -52,11 +52,11 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "check"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "battle ditto"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "care --play"

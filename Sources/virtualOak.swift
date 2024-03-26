@@ -104,11 +104,32 @@ struct Check: ParsableCommand{
     )
         
     var charmander = Charmander()
+    var squirtle = Squirtle()
+    var bulbasaur = Bulbassaur()
     
     func run(){
         
-        if let buddy = readData(fileURL) {
+        if var buddy = readData(fileURL) {
+            
+            if buddy.status.saude < 0 {
+                buddy.status.saude = 0
+            } else if buddy.status.saude > 100 {
+                buddy.status.saude = 100
+            }
+            
+            if buddy.status.felicidade < 0 {
+                buddy.status.felicidade = 0
+            } else if buddy.status.felicidade > 100 {
+                buddy.status.felicidade = 100
+            }
 
+            if buddy.status.fome < 0 {
+                buddy.status.fome = 0
+            } else if buddy.status.fome > 100 {
+                buddy.status.fome = 100
+            }
+
+            
             printWithBox("""
                          Status do seu buddy
                          """, style: "important", path: boxesPATH)
@@ -127,8 +148,18 @@ struct Check: ParsableCommand{
                     charmander.charmanderFeliz()
                 }
             } else if buddy.especie == "squirtle" {
+                if buddy.status.fome > 80 || buddy.status.saude < 20 || buddy.status.felicidade < 20 {
+                    squirtle.squirtleTriste()
+                } else {
+                    squirtle.squirtleFeliz()
+                }
 
-            } else {
+            } else if buddy.especie == "bulbasaur"{
+                if buddy.status.fome > 80 || buddy.status.saude < 20 || buddy.status.felicidade < 20 {
+                    bulbasaur.bulbasaurTriste()
+                } else {
+                    bulbasaur.bulbassaurFeliz()
+                }
                 
             }
         } else {

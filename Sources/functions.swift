@@ -253,7 +253,7 @@ func callForBattle(_ adversario: String){
     var buddy = readData(fileURL)!
     buddy.getAttacks()
     
-    if let pokemon = callForPokemon(pokemon: adversario, path: advURL, file: "adv"){
+    if var pokemon = callForPokemon(pokemon: adversario, path: advURL, file: "adv"){
         
         printRPGText("Procurando pokemon...")
         verbosePrint("Um \(pokemon.especie) selvagem apareceu!")
@@ -267,23 +267,50 @@ func callForBattle(_ adversario: String){
             
             shell("clear")
             
-            battleArt(adversario: pokemon, buddy: buddy)
+            var choose = 0
             
-            print("")
-                        
-            if let input = readLine(), let attack = Int(input), (1...2).contains(attack) {
+            while true {
                 
-            } else {
-                print("Ataque inexistente")
+                battleArt(adversario: pokemon, buddy: buddy)
+                
+                print("")
+                
+                if let input = readLine(), let attack = Int(input), (1...2).contains(attack) {
+                    choose = attack
+                    break
+                } else {
+                    print("Ataque inexistente")
+                }
             }
-
+            var rng = SystemRandomNumberGenerator()
+//            let critic: Int = Int.random(in: 0...faces, using: &rng)
+            
+            print("\(String(describing: buddy.nomeBuddy ?? "")) usou \(buddy.ataques?.ataques?[choose-1] ?? "erro") ")
+            print("Causou \(20 + dado(faces: 6)*20) de dano")
+            buddy.status.saude = buddy.status.saude - (20 + dado(faces: 6)*20)
+            
+            print("\(String(describing: pokemon.especie)) usou \(pokemon.ataques[Int.random(in: 0...1, using: &rng)]) ")
+            print("Causou \(20 + dado(faces: 6)*20) de dano")
+            pokemon.saude = pokemon.saude - (20 + dado(faces: 6)*20)
+            
+            if pokemon.saude <= 0{
+                print("PARABENS!")
+                print("\(buddy.nomeBuddy ?? "") ganhou!!!")
+                break
+            } else if buddy.status.saude <= 0 {
+                print("Essa não!")
+                print("\(pokemon.especie) ganhou!")
+                print("Leve seu buddy até a Enfermeira Joy e tente novamente!")
+                break
+            }
             
             count += 1
-            break
         }
     } else {
         print("Erro ao iniciar a batalha, tente novamente!")
     }
+    
+    saveData(fileURL, buddy: buddy)
 }
 
 func dado(faces: Int) -> Double{

@@ -9,7 +9,7 @@ import Foundation
 
 struct Status: Codable {
     var fome: Int = 10
-    var saude: Int = 100
+    var saude: Double = 100
     var felicidade: Int = 100
 }
 
@@ -42,6 +42,7 @@ struct Buddy: Codable {
         
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         if let output = String(data: data, encoding: .utf8) {
+            print(output)
         }
         
         // Ler os dados JSON do arquivo
@@ -65,7 +66,7 @@ struct Buddy: Codable {
 struct Adversario: Codable {
     let especie: String
     let tipo: String
-    var saude: Int
+    var saude: Double
     let ataques: [String]
 }
 
@@ -81,11 +82,15 @@ var pokemons:[Buddy] = [pikachu, charmander, squirtle, bulbasaur]
 
 func aumentarFelicidade(){
     var buddy = readData(fileURL)!
-    if buddy.status.felicidade > 101 || buddy.status.felicidade <= 0 {
+    if buddy.status.felicidade >= 101 || buddy.status.felicidade <= 0 {
         return
     }
     
     buddy.status.felicidade += 25
+    
+    if buddy.status.felicidade > 100 {
+        buddy.status.felicidade = 100
+    }
     
     saveData(fileURL, buddy: buddy)
 }
@@ -95,6 +100,10 @@ func diminuirFelicidade(){
     
     buddy.status.felicidade -= 10
     
+    if buddy.status.felicidade < 0 {
+        buddy.status.felicidade = 0
+    }
+    
     saveData(fileURL, buddy: buddy)
 }
 
@@ -103,7 +112,12 @@ func aumentarFome(){
     if buddy.status.fome > 101 || buddy.status.fome <= 0 {
         return
     }
+    
     buddy.status.fome += 10
+    
+    if buddy.status.fome > 100 {
+        buddy.status.fome = 100
+    }
     
     saveData(fileURL, buddy: buddy)
 }
@@ -113,7 +127,12 @@ func diminuirFome(){
     if buddy.status.fome > 101 || buddy.status.fome <= 0 {
         return
     }
+    
     buddy.status.fome -= 25
+    
+    if buddy.status.fome < 0 {
+        buddy.status.fome = 0
+    }
     
     saveData(fileURL, buddy: buddy)
 }
@@ -126,7 +145,7 @@ func aumentarSaude(){
     saveData(fileURL, buddy: buddy)
 }
 
-func diminuirSaude(points: Int){
+func diminuirSaude(points: Double){
     var buddy = readData(fileURL)!
     
     if buddy.status.saude > 101 || buddy.status.saude <= 0 {

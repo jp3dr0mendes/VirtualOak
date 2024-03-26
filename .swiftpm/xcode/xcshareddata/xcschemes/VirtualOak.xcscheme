@@ -56,15 +56,15 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "battle ditto"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "care --snack"
+            argument = "care --play"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "init"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>

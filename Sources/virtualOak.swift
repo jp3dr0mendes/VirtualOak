@@ -17,20 +17,13 @@ struct Oak: ParsableCommand, Decodable {
     )
 }
 
-func obterBuddyValido() -> Int {
-    while true {
-        print("Por favor, digite o número correspondente ao pokemon que deseja escolher: ")
-        if let input = readLine(), let numero = Int(input), (0...3).contains(numero) {
-            return numero
-        } else {
-            return 0
-        }
-    }
-}
-
 struct Init: ParsableCommand {
     
     //TODO: manipulacao de arquivo
+
+    static var configuration = CommandConfiguration(
+            abstract: "Inicie sua jornada Pokemon"
+    )
     
     func run(){
         
@@ -40,10 +33,10 @@ struct Init: ParsableCommand {
                         Muito prazer em conhece-lo, me chamo professor carvalho estou aqui para ajuda-lo
                         durante toda sua jornada. Se precisar de mim, basta me chamar da seguinte forma:
                         """
-        ,style: "scroll")
+        ,style: "scroll"
+        ,path: boxesPATH)
         
         print("""
-            
             oak <subcomando> [option]
             
             Qualquer dúvida de como interagir basta colocar:
@@ -99,12 +92,16 @@ struct Init: ParsableCommand {
                 print("Digite SIM (S) ou NAO (N)")
             }
         }
-        pokemons[chooseBuddy].getAttacks()
+        //pokemons[chooseBuddy].getAttacks()
         saveData(fileURL, buddy: pokemons[chooseBuddy])
     }
 }
 
 struct Check: ParsableCommand{
+
+    static var configuration = CommandConfiguration(
+            abstract: "Check como está o seu pokemon"
+    )
         
     var charmander = Charmander()
     
@@ -112,8 +109,10 @@ struct Check: ParsableCommand{
         
         if let buddy = readData(fileURL) {
 
-            cabecalho(titulo: "CHECK")
-            
+            printWithBox("""
+                         Status do seu buddy
+                         """, style: "important", path: boxesPATH)
+
             print("""
             
             Fome       : \(buddy.status.fome)
@@ -158,21 +157,21 @@ struct Care: ParsableCommand{
         
     func run(){
         if snack{
-            printWithBox("Alimentando seu Buddy", style: "parchment")
-            verbosePrint("Estamos alimentando seu monstrinho")
-            verbosePrint("Prontinho agora ele tem \(readData(fileURL)?.status.fome)")
-            
+            printWithBox("Alimentando seu Buddy", style: "parchment", path: boxesPATH)
+            verbose(narratives: snackNarrative)
             diminuirFome()
-//            callForPokemon(pokemon: "ditto")
         } else if play{
+            printWithBox("Brincando com seu Buddy", style: "parchment", path: boxesPATH)
+            verbose(narratives: playNarrative)
             aumentarFelicidade()
             aumentarFome()
         } else if joy{
+            printWithBox("Centro Pokemon", style: "parchment", path: boxesPATH)
+            verbose(narratives: joyNarrative)
             aumentarSaude()
         }
     }
 }
-
 
 
 struct Battle: ParsableCommand{
